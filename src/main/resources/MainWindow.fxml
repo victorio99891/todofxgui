@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="567.0" spacing="20.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mechanitis.demo.stockui.TaskController">
+  <children>
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Sync with API" />
+                  <MenuItem mnemonicParsing="false" text="Exit App" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <HBox prefHeight="336.0" prefWidth="567.0">
+         <children>
+            <Pane prefHeight="336.0" prefWidth="30.0" />
+            <TableView prefHeight="200.0" prefWidth="200.0">
+              <columns>
+                <TableColumn prefWidth="199.0" text="TO-DO" />
+              </columns>
+            </TableView>
+            <Pane layoutX="10.0" layoutY="10.0" prefHeight="336.0" prefWidth="111.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="336.0" prefWidth="110.0" spacing="20.0">
+                     <children>
+                        <Label text="ACTIONS">
+                           <font>
+                              <Font name="System Bold" size="11.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="doTaskBtn" mnemonicParsing="false" onMouseClicked="#doTaskBtn_Click" text="Do Task" />
+                        <Button mnemonicParsing="false" text="Undo Task" />
+                        <Label alignment="CENTER" layoutX="10.0" layoutY="178.0" prefHeight="17.0" prefWidth="110.0" text="MANAGEMENT">
+                           <font>
+                              <Font name="System Bold" size="11.0" />
+                           </font>
+                        </Label>
+                        <Button mnemonicParsing="false" prefHeight="22.0" prefWidth="84.0" text="Create Task" />
+                        <Button layoutX="23.0" layoutY="60.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="84.0" text="Edit Task" />
+                        <Button layoutX="23.0" layoutY="257.0" mnemonicParsing="false" prefHeight="22.0" prefWidth="84.0" text="Delete Task" />
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                     <padding>
+                        <Insets top="50.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </Pane>
+            <TableView prefHeight="200.0" prefWidth="200.0">
+               <columns>
+                  <TableColumn prefWidth="199.0" text="DONE" />
+               </columns>
+            </TableView>
+            <Pane layoutX="293.0" layoutY="10.0" prefHeight="100.0" prefWidth="30.0" />
+         </children>
+      </HBox>
+  </children>
+</VBox>
