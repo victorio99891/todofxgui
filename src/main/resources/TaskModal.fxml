@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="mainStage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="281.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.wiktor.todosgui.controllers.TaskModalController">
+
+    <children>
+        <HBox alignment="CENTER" prefHeight="57.0" prefWidth="320.0" spacing="20.0">
+            <children>
+                <Label text="Title:" />
+                <TextField fx:id="taskTitleTxtFd" prefHeight="25.0" prefWidth="248.0" promptText="Enter task title..." />
+            </children>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+         <padding>
+            <Insets right="-12.0" />
+         </padding>
+        </HBox>
+      <HBox prefHeight="29.0" prefWidth="350.0">
+         <children>
+            <Label fx:id="titleErrorLabel" alignment="CENTER" prefHeight="34.0" prefWidth="384.0" textFill="RED">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+        <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="125.0" prefWidth="320.0" spacing="20.0">
+            <children>
+                <Label text="Details:" />
+                <TextArea fx:id="taskDetailsTxtFd" prefHeight="94.0" prefWidth="248.0" promptText="Write more details..." />
+            </children>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+        </HBox>
+      <HBox layoutX="10.0" layoutY="63.0" prefHeight="27.0" prefWidth="350.0">
+         <children>
+            <Label fx:id="detailsErrorLabel" alignment="CENTER" prefHeight="34.0" prefWidth="352.0" textFill="RED">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="76.0" prefHeight="37.0" prefWidth="320.0" spacing="20.0">
+         <padding>
+            <Insets right="7.0" />
+         </padding>
+         <children>
+            <Button fx:id="taskDeleteBtn" alignment="CENTER" mnemonicParsing="false" onAction="#taskDelete_Action" prefHeight="25.0" prefWidth="94.0" text="Delete" />
+            <Button fx:id="taskCancelBtn" alignment="CENTER" layoutX="259.0" layoutY="16.0" mnemonicParsing="false" onAction="#taskCancel_Action" prefHeight="25.0" prefWidth="94.0" text="Cancel" />
+            <Button fx:id="taskSaveBtn" alignment="CENTER" layoutX="145.0" layoutY="16.0" mnemonicParsing="false" onAction="#taskSave_Action" prefHeight="25.0" prefWidth="94.0" text="Save" />
+         </children>
+      </HBox>
+    </children>
+</VBox>

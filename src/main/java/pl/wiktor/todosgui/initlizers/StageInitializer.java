@@ -1,4 +1,4 @@
-package com.mechanitis.demo.stockui;
+package pl.wiktor.todosgui.initlizers;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
+import pl.wiktor.todosgui.events.StageReadyEvent;
 
 import java.io.IOException;
 

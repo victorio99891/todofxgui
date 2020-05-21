@@ -1,4 +1,4 @@
-package com.mechanitis.demo.stockui;
+package pl.wiktor.todosgui.events;
 
 import javafx.stage.Stage;
 import org.springframework.context.ApplicationEvent;
