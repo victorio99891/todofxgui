@@ -1,14 +1,13 @@
 package pl.wiktor.todosgui.controllers;
 
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
@@ -36,16 +35,18 @@ public class MainStageController {
 
     @FXML
     private VBox mainStage;
-    @FXML
-    private Button doTaskBtn;
-    @FXML
-    private Button undoTaskBtn;
+
     @FXML
     private Button createTaskBtn;
+
     @FXML
-    private Button editTaskBtn;
+    private Menu fileMenu;
+
     @FXML
-    private Button deleteTaskBtn;
+    private MenuItem syncMenuItem;
+
+    @FXML
+    private MenuItem exitMenuItem;
 
     @FXML
     private TableView<Task> todoTableView;
@@ -62,6 +63,36 @@ public class MainStageController {
 
     @FXML
     public void initialize() {
+        fillTaskTables();
+        registerClickableTasks();
+        registerFileMenuEventHandlers();
+    }
+
+
+    @PostConstruct
+    public void init() {
+
+    }
+
+    @FXML
+    void createTaskBtn_Click(MouseEvent event) {
+        AppStateStorage.setSelectedTask(null);
+        applicationContext.publishEvent(new StageReadyEvent(new StageReadyEvent.StageInfo(JavaFxLauncher.getMainStage(), new ClassPathResource("TaskModal.fxml"))));
+    }
+
+    private void registerFileMenuEventHandlers() {
+        this.exitMenuItem.addEventHandler(ActionEvent.ACTION, (event) -> {
+            Platform.exit();
+        });
+
+        this.syncMenuItem.addEventHandler(ActionEvent.ACTION, (event) -> {
+            AppStateStorage.setTasks(taskService.findAll());
+            fillTaskTables();
+        });
+    }
+
+    private void fillTaskTables() {
+        AppStateStorage.setTasks(taskService.findAll());
         todoTableColumn.setCellValueFactory(data -> {
             StringProperty sp = new SimpleStringProperty();
             sp.setValue(String.valueOf(data.getValue().getTitle()));
@@ -74,19 +105,6 @@ public class MainStageController {
             return sp;
         });
         doneTableView.setItems(FXCollections.observableArrayList(AppStateStorage.getDoneTasks()));
-        registerClickableTasks();
-    }
-
-    @PostConstruct
-    public void init() {
-        AppStateStorage.setTasks(taskService.findAll());
-
-    }
-
-    @FXML
-    void createTaskBtn_Click(MouseEvent event) {
-        AppStateStorage.setSelectedTask(null);
-        applicationContext.publishEvent(new StageReadyEvent(new StageReadyEvent.StageInfo(JavaFxLauncher.getMainStage(), new ClassPathResource("TaskModal.fxml"))));
     }
 
     private void registerClickableTasks() {

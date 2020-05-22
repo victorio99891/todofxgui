@@ -1,11 +1,9 @@
 package pl.wiktor.todosgui.controllers;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +13,20 @@ import org.springframework.stereotype.Component;
 import pl.wiktor.todosgui.JavaFxLauncher;
 import pl.wiktor.todosgui.events.StageReadyEvent;
 import pl.wiktor.todosgui.model.Task;
+import pl.wiktor.todosgui.service.TaskService;
 import pl.wiktor.todosgui.state.AppStateStorage;
+
+import java.util.Arrays;
 
 @Slf4j
 @Component
 public class TaskModalController {
 
     @Autowired
+    TaskService taskService;
+    @Autowired
     private ConfigurableApplicationContext applicationContext;
+    private Task selectedTask = null;
 
     @FXML
     private VBox mainStage;
@@ -32,6 +36,9 @@ public class TaskModalController {
 
     @FXML
     private Label titleErrorLabel;
+
+    @FXML
+    private ChoiceBox<String> taskStatusChBox;
 
     @FXML
     private TextArea taskDetailsTxtFd;
@@ -50,28 +57,77 @@ public class TaskModalController {
 
     @FXML
     void taskCancel_Action(ActionEvent event) {
+        AppStateStorage.setSelectedTask(null);
         applicationContext.publishEvent(new StageReadyEvent(new StageReadyEvent.StageInfo(JavaFxLauncher.getMainStage(), new ClassPathResource("MainWindow.fxml"))));
     }
 
     @FXML
     void taskDelete_Action(ActionEvent event) {
-        applicationContext.publishEvent(new StageReadyEvent(new StageReadyEvent.StageInfo(JavaFxLauncher.getMainStage(), new ClassPathResource("MainWindow.fxml"))));
+        if (selectedTask != null) {
+            final boolean deleted = taskService.delete(selectedTask.getUUID());
+            if (deleted) {
+                applicationContext.publishEvent(new StageReadyEvent(new StageReadyEvent.StageInfo(JavaFxLauncher.getMainStage(), new ClassPathResource("MainWindow.fxml"))));
+            }
+        }
     }
 
     @FXML
     void taskSave_Action(ActionEvent event) {
-        applicationContext.publishEvent(new StageReadyEvent(new StageReadyEvent.StageInfo(JavaFxLauncher.getMainStage(), new ClassPathResource("MainWindow.fxml"))));
+        boolean valid = validateData();
+        Task response = null;
+
+        if (valid) {
+            if (selectedTask == null) {
+                log.info("[taskSave_Action] Create new task!");
+                Task task = Task.builder()
+                        .title(this.taskTitleTxtFd.getText())
+                        .details(this.taskDetailsTxtFd.getText())
+                        .taskStatus(this.taskStatusChBox.getValue())
+                        .build();
+                response = taskService.add(task);
+            } else {
+                log.info("[taskSave_Action] Modify existing task!");
+                selectedTask.setTitle(this.taskTitleTxtFd.getText());
+                selectedTask.setDetails(this.taskDetailsTxtFd.getText());
+                selectedTask.setTaskStatus(this.taskStatusChBox.getValue());
+                response = taskService.modify(selectedTask.getUUID(), selectedTask);
+            }
+            if (response != null) {
+                AppStateStorage.setSelectedTask(null);
+                applicationContext.publishEvent(new StageReadyEvent(new StageReadyEvent.StageInfo(JavaFxLauncher.getMainStage(), new ClassPathResource("MainWindow.fxml"))));
+            }
+        }
     }
 
     @FXML
     public void initialize() {
-        Task task = AppStateStorage.getSelectedTask();
-        if (task == null) {
+        this.taskStatusChBox.setItems(FXCollections.observableList(Arrays.asList("TODO", "DONE")));
+        selectedTask = AppStateStorage.getSelectedTask();
+        if (selectedTask == null) {
             this.taskDeleteBtn.setDisable(true);
+            this.taskStatusChBox.setValue("TODO");
+            this.taskStatusChBox.setDisable(true);
         } else {
-            this.taskTitleTxtFd.setText(task.getTitle());
-            this.taskDetailsTxtFd.setText(task.getDetails());
+            this.taskTitleTxtFd.setText(selectedTask.getTitle());
+            this.taskDetailsTxtFd.setText(selectedTask.getDetails());
+            this.taskStatusChBox.setValue(selectedTask.getTaskStatus());
         }
+    }
+
+    private boolean validateData() {
+        if (this.taskTitleTxtFd.getText().length() == 0 || this.taskTitleTxtFd.getText().isEmpty()) {
+            this.titleErrorLabel.setText("Title cannot be empty!");
+        }
+
+        if (this.taskDetailsTxtFd.getText().length() == 0 || this.taskDetailsTxtFd.getText().isEmpty()) {
+            this.detailsErrorLabel.setText("Details cannot be empty!");
+        }
+
+        if (this.taskTitleTxtFd.getText().length() != 0 && this.taskDetailsTxtFd.getText().length() != 0) {
+            return true;
+        }
+
+        return false;
     }
 
 }

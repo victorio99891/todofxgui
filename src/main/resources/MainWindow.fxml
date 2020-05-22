@@ -18,10 +18,10 @@
   <children>
       <MenuBar>
         <menus>
-          <Menu mnemonicParsing="false" text="File">
+          <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Sync with API" />
-                  <MenuItem mnemonicParsing="false" text="Exit App" />
+              <MenuItem fx:id="syncMenuItem" mnemonicParsing="false" text="Sync with API" />
+                  <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" text="Exit App" />
             </items>
           </Menu>
         </menus>
