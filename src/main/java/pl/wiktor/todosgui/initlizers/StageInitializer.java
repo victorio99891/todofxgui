@@ -7,8 +7,11 @@ import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
+import pl.wiktor.todosgui.JavaFxLauncher;
 import pl.wiktor.todosgui.events.StageReadyEvent;
+import pl.wiktor.todosgui.events.model.StageInfo;
 
 import java.io.IOException;
 
@@ -22,6 +25,14 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
                             ApplicationContext applicationContext) {
         this.applicationTitle = applicationTitle;
         this.applicationContext = applicationContext;
+    }
+
+    public void publishStageReadyEvent_SameStage(AvailableView view) {
+        applicationContext.publishEvent(new StageReadyEvent(new StageInfo(JavaFxLauncher.getMainStage(), new ClassPathResource(view.getName()))));
+    }
+
+    public void publishStageReadyEvent_NewStage(AvailableView view) {
+        applicationContext.publishEvent(new StageReadyEvent(new StageInfo(JavaFxLauncher.getNewStage(), new ClassPathResource(view.getName()))));
     }
 
     @Override

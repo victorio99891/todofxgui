@@ -12,11 +12,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
-import pl.wiktor.todosgui.JavaFxLauncher;
-import pl.wiktor.todosgui.events.StageReadyEvent;
+import pl.wiktor.todosgui.initlizers.AvailableView;
+import pl.wiktor.todosgui.initlizers.StageInitializer;
 import pl.wiktor.todosgui.model.Task;
 import pl.wiktor.todosgui.service.TaskService;
 import pl.wiktor.todosgui.state.AppStateStorage;
@@ -28,7 +26,7 @@ import javax.annotation.PostConstruct;
 public class MainStageController {
 
     @Autowired
-    private ConfigurableApplicationContext applicationContext;
+    private StageInitializer stageInitializer;
 
     @Autowired
     private TaskService taskService;
@@ -77,7 +75,7 @@ public class MainStageController {
     @FXML
     void createTaskBtn_Click(MouseEvent event) {
         AppStateStorage.setSelectedTask(null);
-        applicationContext.publishEvent(new StageReadyEvent(new StageReadyEvent.StageInfo(JavaFxLauncher.getMainStage(), new ClassPathResource("TaskModal.fxml"))));
+        stageInitializer.publishStageReadyEvent_SameStage(AvailableView.TASK_MODAL);
     }
 
     private void registerFileMenuEventHandlers() {
@@ -116,7 +114,7 @@ public class MainStageController {
                     log.info(item.toString());
                     if (item != null) {
                         AppStateStorage.setSelectedTask(item);
-                        applicationContext.publishEvent(new StageReadyEvent(new StageReadyEvent.StageInfo(JavaFxLauncher.getMainStage(), new ClassPathResource("TaskModal.fxml"))));
+                        stageInitializer.publishStageReadyEvent_SameStage(AvailableView.TASK_MODAL);
                     }
                 }
             });
@@ -130,7 +128,7 @@ public class MainStageController {
                     log.info(item.toString());
                     if (item != null) {
                         AppStateStorage.setSelectedTask(item);
-                        applicationContext.publishEvent(new StageReadyEvent(new StageReadyEvent.StageInfo(JavaFxLauncher.getMainStage(), new ClassPathResource("TaskModal.fxml"))));
+                        stageInitializer.publishStageReadyEvent_SameStage(AvailableView.TASK_MODAL);
                     }
                 }
             });

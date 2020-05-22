@@ -7,6 +7,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import pl.wiktor.todosgui.events.StageReadyEvent;
+import pl.wiktor.todosgui.events.model.StageInfo;
 
 public class JavaFxLauncher extends Application {
     private static Stage mainStage = null;
@@ -29,7 +30,7 @@ public class JavaFxLauncher extends Application {
     @Override
     public void start(Stage stage) {
         mainStage = stage;
-        applicationContext.publishEvent(new StageReadyEvent(new StageReadyEvent.StageInfo(stage, new ClassPathResource("MainWindow.fxml"))));
+        applicationContext.publishEvent(new StageReadyEvent(new StageInfo(stage, new ClassPathResource("MainWindow.fxml"))));
     }
 
     @Override

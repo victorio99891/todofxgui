@@ -7,11 +7,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
-import pl.wiktor.todosgui.JavaFxLauncher;
-import pl.wiktor.todosgui.events.StageReadyEvent;
+import pl.wiktor.todosgui.initlizers.AvailableView;
+import pl.wiktor.todosgui.initlizers.StageInitializer;
 import pl.wiktor.todosgui.model.Task;
 import pl.wiktor.todosgui.service.TaskService;
 import pl.wiktor.todosgui.state.AppStateStorage;
@@ -24,8 +22,10 @@ public class TaskModalController {
 
     @Autowired
     TaskService taskService;
+
     @Autowired
-    private ConfigurableApplicationContext applicationContext;
+    StageInitializer stageInitializer;
+
     private Task selectedTask = null;
 
     @FXML
@@ -58,7 +58,7 @@ public class TaskModalController {
     @FXML
     void taskCancel_Action(ActionEvent event) {
         AppStateStorage.setSelectedTask(null);
-        applicationContext.publishEvent(new StageReadyEvent(new StageReadyEvent.StageInfo(JavaFxLauncher.getMainStage(), new ClassPathResource("MainWindow.fxml"))));
+        stageInitializer.publishStageReadyEvent_SameStage(AvailableView.MAIN);
     }
 
     @FXML
@@ -66,7 +66,7 @@ public class TaskModalController {
         if (selectedTask != null) {
             final boolean deleted = taskService.delete(selectedTask.getUUID());
             if (deleted) {
-                applicationContext.publishEvent(new StageReadyEvent(new StageReadyEvent.StageInfo(JavaFxLauncher.getMainStage(), new ClassPathResource("MainWindow.fxml"))));
+                stageInitializer.publishStageReadyEvent_SameStage(AvailableView.MAIN);
             }
         }
     }
@@ -94,7 +94,7 @@ public class TaskModalController {
             }
             if (response != null) {
                 AppStateStorage.setSelectedTask(null);
-                applicationContext.publishEvent(new StageReadyEvent(new StageReadyEvent.StageInfo(JavaFxLauncher.getMainStage(), new ClassPathResource("MainWindow.fxml"))));
+                stageInitializer.publishStageReadyEvent_SameStage(AvailableView.MAIN);
             }
         }
     }
