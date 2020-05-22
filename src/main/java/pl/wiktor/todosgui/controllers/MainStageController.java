@@ -84,7 +84,6 @@ public class MainStageController {
         });
 
         this.syncMenuItem.addEventHandler(ActionEvent.ACTION, (event) -> {
-            AppStateStorage.setTasks(taskService.findAll());
             fillTaskTables();
         });
     }
