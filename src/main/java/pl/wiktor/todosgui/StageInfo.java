@@ -1,4 +1,4 @@
-package pl.wiktor.todosgui.events.model;
+package pl.wiktor.todosgui;
 
 import javafx.stage.Stage;
 import org.springframework.core.io.Resource;

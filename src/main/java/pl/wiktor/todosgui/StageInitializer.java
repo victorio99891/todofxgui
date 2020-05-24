@@ -1,4 +1,4 @@
-package pl.wiktor.todosgui.initlizers;
+package pl.wiktor.todosgui;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,9 +9,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
+import pl.wiktor.todosgui.AvailableView;
 import pl.wiktor.todosgui.JavaFxLauncher;
-import pl.wiktor.todosgui.events.StageReadyEvent;
-import pl.wiktor.todosgui.events.model.StageInfo;
+import pl.wiktor.todosgui.StageReadyEvent;
+import pl.wiktor.todosgui.StageInfo;
 
 import java.io.IOException;
 

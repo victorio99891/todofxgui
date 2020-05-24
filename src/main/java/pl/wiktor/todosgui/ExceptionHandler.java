@@ -1,4 +1,4 @@
-package pl.wiktor.todosgui.service;
+package pl.wiktor.todosgui;
 
 import javafx.scene.control.Alert;
 import org.springframework.stereotype.Component;

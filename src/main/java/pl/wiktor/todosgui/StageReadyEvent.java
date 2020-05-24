@@ -1,7 +1,7 @@
-package pl.wiktor.todosgui.events;
+package pl.wiktor.todosgui;
 
 import org.springframework.context.ApplicationEvent;
-import pl.wiktor.todosgui.events.model.StageInfo;
+import pl.wiktor.todosgui.StageInfo;
 
 public class StageReadyEvent extends ApplicationEvent {
     public StageReadyEvent(StageInfo stageInfo) {
