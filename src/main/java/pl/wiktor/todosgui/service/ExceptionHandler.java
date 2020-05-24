@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public interface ExceptionHandler {
     static void resolve(String exceptionTitle, String exceptionDetails) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Unexpected exception occurred:");
+        alert.setTitle("Unexpected exception");
         alert.setHeaderText(exceptionTitle);
         alert.setContentText(exceptionDetails);
         alert.showAndWait();
