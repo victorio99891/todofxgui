@@ -1,4 +1,4 @@
-package pl.wiktor.todosgui.model;
+package pl.wiktor.todosgui.controllers.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Task {
+public class TaskDTO {
 
     private Long _taskId;
 

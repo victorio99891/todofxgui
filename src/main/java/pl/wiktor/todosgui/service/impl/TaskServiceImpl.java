@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import pl.wiktor.todosgui.JavaFxLauncher;
-import pl.wiktor.todosgui.model.Task;
 import pl.wiktor.todosgui.service.ExceptionHandler;
 import pl.wiktor.todosgui.service.TaskService;
+import pl.wiktor.todosgui.service.model.TaskBO;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,13 +23,13 @@ public class TaskServiceImpl implements TaskService {
     private static final RestTemplate restTemplate = new RestTemplate();
 
     @Override
-    public List<Task> findAll() {
+    public List<TaskBO> findAll() {
 
         try {
-            ResponseEntity<?> tasksResponse = restTemplate.getForEntity(REST_API_BASE_LINK + "/tasks", Task[].class);
+            ResponseEntity<?> tasksResponse = restTemplate.getForEntity(REST_API_BASE_LINK + "/tasks", TaskBO[].class);
             log.info("[findAll]: Trying to fetch data.");
             if (tasksResponse.getStatusCode().value() == 200 && tasksResponse.getBody() != null) {
-                List<Task> fetched = Arrays.asList((Task[]) tasksResponse.getBody());
+                List<TaskBO> fetched = Arrays.asList((TaskBO[]) tasksResponse.getBody());
                 log.info("[findAll]: Fetching success. Status: " + tasksResponse.getStatusCode().toString() + " Number of records: " + fetched.size());
                 return fetched;
             }
@@ -46,12 +46,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> findAllByStatus(String taskStatus) {
+    public List<TaskBO> findAllByStatus(String taskStatus) {
         try {
-            ResponseEntity<?> tasksResponse = restTemplate.getForEntity(REST_API_BASE_LINK + "/tasks?status=" + taskStatus, Task[].class);
+            ResponseEntity<?> tasksResponse = restTemplate.getForEntity(REST_API_BASE_LINK + "/tasks?status=" + taskStatus, TaskBO[].class);
             log.info("[findAllByStatus]: Trying to fetch data by status: " + taskStatus);
             if (tasksResponse.getStatusCode().value() == 200 && tasksResponse.getBody() != null) {
-                List<Task> fetched = Arrays.asList((Task[]) tasksResponse.getBody());
+                List<TaskBO> fetched = Arrays.asList((TaskBO[]) tasksResponse.getBody());
                 log.info("[findAllByStatus]: Fetching success. Status: " + tasksResponse.getStatusCode().toString() + " Number of records: " + fetched.size());
                 return fetched;
             }
@@ -67,12 +67,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task findById(Long id) {
+    public TaskBO findById(Long id) {
         try {
-            ResponseEntity<?> tasksResponse = restTemplate.getForEntity(REST_API_BASE_LINK + "/tasks/" + id, Task.class);
+            ResponseEntity<?> tasksResponse = restTemplate.getForEntity(REST_API_BASE_LINK + "/tasks/" + id, TaskBO.class);
             log.info("[findById]: Trying to fetch data by ID: " + id);
             if (tasksResponse.getStatusCode().value() == 200 && tasksResponse.getBody() != null) {
-                Task fetched = (Task) tasksResponse.getBody();
+                TaskBO fetched = (TaskBO) tasksResponse.getBody();
                 log.info("[findById]: Fetching success. Status: " + tasksResponse.getStatusCode().toString() + " Data: " + fetched.toString());
                 return fetched;
             }
@@ -87,12 +87,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task findByUUID(String uuid) {
+    public TaskBO findByUUID(String uuid) {
         try {
-            ResponseEntity<?> tasksResponse = restTemplate.getForEntity(REST_API_BASE_LINK + "/tasks/" + uuid, Task.class);
+            ResponseEntity<?> tasksResponse = restTemplate.getForEntity(REST_API_BASE_LINK + "/tasks/" + uuid, TaskBO.class);
             log.info("[findByUUID]: Trying to fetch data by UUID: " + uuid);
             if (tasksResponse.getStatusCode().value() == 200 && tasksResponse.getBody() != null) {
-                Task fetched = (Task) tasksResponse.getBody();
+                TaskBO fetched = (TaskBO) tasksResponse.getBody();
                 log.info("[findByUUID]: Fetching success. Status: " + tasksResponse.getStatusCode().toString() + " Data: " + fetched.toString());
                 return fetched;
             }
@@ -107,13 +107,13 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task add(Task task) {
+    public TaskBO add(TaskBO taskBO) {
         try {
-            HttpEntity<Task> httpEntity = getTaskHttpEntity(task);
-            ResponseEntity<?> tasksResponse = restTemplate.exchange(REST_API_BASE_LINK + "/tasks", HttpMethod.POST, httpEntity, Task.class);
-            log.info("[add]: Trying to create data: " + task.toString());
+            HttpEntity<TaskBO> httpEntity = getTaskHttpEntity(taskBO);
+            ResponseEntity<?> tasksResponse = restTemplate.exchange(REST_API_BASE_LINK + "/tasks", HttpMethod.POST, httpEntity, TaskBO.class);
+            log.info("[add]: Trying to create data: " + taskBO.toString());
             if (tasksResponse.getStatusCode().value() == 200 && tasksResponse.getBody() != null) {
-                Task fetched = (Task) tasksResponse.getBody();
+                TaskBO fetched = (TaskBO) tasksResponse.getBody();
                 log.info("[add]: Creation success. Status: " + tasksResponse.getStatusCode().toString() + " Data: " + fetched.toString());
                 return fetched;
             }
@@ -128,13 +128,13 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task modify(String uuid, Task task) {
+    public TaskBO modify(String uuid, TaskBO TaskBO) {
         try {
-            HttpEntity<Task> httpEntity = getTaskHttpEntity(task);
-            ResponseEntity<?> tasksResponse = restTemplate.exchange(REST_API_BASE_LINK + "/tasks/" + uuid, HttpMethod.PUT, httpEntity, Task.class);
-            log.info("[modify]: Trying to modify data: " + task.toString());
+            HttpEntity<TaskBO> httpEntity = getTaskHttpEntity(TaskBO);
+            ResponseEntity<?> tasksResponse = restTemplate.exchange(REST_API_BASE_LINK + "/tasks/" + uuid, HttpMethod.PUT, httpEntity, TaskBO.class);
+            log.info("[modify]: Trying to modify data: " + TaskBO.toString());
             if (tasksResponse.getStatusCode().value() == 200 && tasksResponse.getBody() != null) {
-                Task fetched = (Task) tasksResponse.getBody();
+                TaskBO fetched = (TaskBO) tasksResponse.getBody();
                 log.info("[modify]: Modification success. Status: " + tasksResponse.getStatusCode().toString() + " Data: " + fetched.toString());
                 return fetched;
             }
@@ -168,9 +168,9 @@ public class TaskServiceImpl implements TaskService {
         return false;
     }
 
-    private HttpEntity<Task> getTaskHttpEntity(Task task) {
+    private HttpEntity<TaskBO> getTaskHttpEntity(TaskBO taskBO) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        return new HttpEntity<>(task, headers);
+        return new HttpEntity<>(taskBO, headers);
     }
 }

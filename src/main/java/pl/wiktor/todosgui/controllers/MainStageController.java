@@ -13,17 +13,19 @@ import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pl.wiktor.todosgui.initlizers.AvailableView;
-import pl.wiktor.todosgui.initlizers.StageInitializer;
-import pl.wiktor.todosgui.model.Task;
+import pl.wiktor.todosgui.controllers.model.TaskDTO;
+import pl.wiktor.todosgui.events.StageInitializer;
+import pl.wiktor.todosgui.events.enums.AvailableView;
+import pl.wiktor.todosgui.mapper.TaskMapper;
 import pl.wiktor.todosgui.service.TaskService;
 import pl.wiktor.todosgui.state.AppStateStorage;
 
 import javax.annotation.PostConstruct;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public class MainStageController {
+class MainStageController {
 
     @Autowired
     private StageInitializer stageInitializer;
@@ -47,16 +49,16 @@ public class MainStageController {
     private MenuItem exitMenuItem;
 
     @FXML
-    private TableView<Task> todoTableView;
+    private TableView<TaskDTO> todoTableView;
 
     @FXML
-    private TableColumn<Task, String> todoTableColumn;
+    private TableColumn<TaskDTO, String> todoTableColumn;
 
     @FXML
-    private TableView<Task> doneTableView;
+    private TableView<TaskDTO> doneTableView;
 
     @FXML
-    private TableColumn<Task, String> doneTableColumn;
+    private TableColumn<TaskDTO, String> doneTableColumn;
 
 
     @FXML
@@ -74,7 +76,7 @@ public class MainStageController {
 
     @FXML
     void createTaskBtn_Click(MouseEvent event) {
-        AppStateStorage.setSelectedTask(null);
+        AppStateStorage.setSelectedTaskDTO(null);
         stageInitializer.publishStageReadyEvent_SameStage(AvailableView.TASK_MODAL);
     }
 
@@ -89,7 +91,12 @@ public class MainStageController {
     }
 
     private void fillTaskTables() {
-        AppStateStorage.setTasks(taskService.findAll());
+        AppStateStorage.setTaskDTOS(
+                taskService.findAll()
+                        .stream()
+                        .map(TaskMapper::fromBOtoDTO)
+                        .collect(Collectors.toList()));
+
         todoTableColumn.setCellValueFactory(data -> {
             StringProperty sp = new SimpleStringProperty();
             sp.setValue(String.valueOf(data.getValue().getTitle()));
@@ -106,13 +113,13 @@ public class MainStageController {
 
     private void registerClickableTasks() {
         this.todoTableView.setRowFactory(x -> {
-            TableRow<Task> row = new TableRow<>();
+            TableRow<TaskDTO> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
-                    Task item = row.getItem();
+                    TaskDTO item = row.getItem();
                     log.info(item.toString());
                     if (item != null) {
-                        AppStateStorage.setSelectedTask(item);
+                        AppStateStorage.setSelectedTaskDTO(item);
                         stageInitializer.publishStageReadyEvent_SameStage(AvailableView.TASK_MODAL);
                     }
                 }
@@ -120,13 +127,13 @@ public class MainStageController {
             return row;
         });
         this.doneTableView.setRowFactory(x -> {
-            TableRow<Task> row = new TableRow<>();
+            TableRow<TaskDTO> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2 && (!row.isEmpty())) {
-                    Task item = row.getItem();
+                    TaskDTO item = row.getItem();
                     log.info(item.toString());
                     if (item != null) {
-                        AppStateStorage.setSelectedTask(item);
+                        AppStateStorage.setSelectedTaskDTO(item);
                         stageInitializer.publishStageReadyEvent_SameStage(AvailableView.TASK_MODAL);
                     }
                 }

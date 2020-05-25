@@ -1,22 +1,23 @@
 package pl.wiktor.todosgui.service;
 
-import pl.wiktor.todosgui.model.Task;
+import pl.wiktor.todosgui.controllers.model.TaskDTO;
+import pl.wiktor.todosgui.service.model.TaskBO;
 
 import java.util.List;
 
 public interface TaskService {
 
-    List<Task> findAll();
+    List<TaskBO> findAll();
 
-    List<Task> findAllByStatus(String taskStatus);
+    List<TaskBO> findAllByStatus(String taskStatus);
 
-    Task findById(Long id);
+    TaskBO findById(Long id);
 
-    Task findByUUID(String uuid);
+    TaskBO findByUUID(String uuid);
 
-    Task add(Task task);
+    TaskBO add(TaskBO taskDTO);
 
-    Task modify(String uuid, Task task);
+    TaskBO modify(String uuid, TaskBO taskDTO);
 
     boolean delete(String uuid);
 }

@@ -1,44 +1,40 @@
 package pl.wiktor.todosgui.state;
 
-import pl.wiktor.todosgui.model.Task;
+import pl.wiktor.todosgui.controllers.model.TaskDTO;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AppStateStorage {
-    private static List<Task> tasks = new ArrayList<>();
+public abstract class AppStateStorage {
+    private static List<TaskDTO> taskDTOS = new ArrayList<>();
 
-    private static Task selectedTask = null;
+    private static TaskDTO selectedTaskDTO = null;
 
-    private AppStateStorage() {
-
+    public static TaskDTO getSelectedTaskDTO() {
+        return selectedTaskDTO;
     }
 
-    public static Task getSelectedTask() {
-        return selectedTask;
+    public static void setSelectedTaskDTO(TaskDTO taskDTO) {
+        selectedTaskDTO = taskDTO;
     }
 
-    public static void setSelectedTask(Task task) {
-        selectedTask = task;
+    public static List<TaskDTO> getTaskDTOS() {
+        return taskDTOS;
     }
 
-    public static List<Task> getTasks() {
-        return tasks;
+    public static void setTaskDTOS(List<TaskDTO> newTaskDTOS) {
+        taskDTOS = newTaskDTOS;
     }
 
-    public static void setTasks(List<Task> ntasks) {
-        tasks = ntasks;
-    }
-
-    public static List<Task> getToDoTasks() {
-        return tasks.stream()
+    public static List<TaskDTO> getToDoTasks() {
+        return taskDTOS.stream()
                 .filter(x -> x.getTaskStatus().equals("TODO"))
                 .collect(Collectors.toList());
     }
 
-    public static List<Task> getDoneTasks() {
-        return tasks.stream()
+    public static List<TaskDTO> getDoneTasks() {
+        return taskDTOS.stream()
                 .filter(x -> x.getTaskStatus().equals("DONE"))
                 .collect(Collectors.toList());
     }

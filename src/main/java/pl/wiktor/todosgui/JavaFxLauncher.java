@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.io.ClassPathResource;
-import pl.wiktor.todosgui.events.StageReadyEvent;
+import pl.wiktor.todosgui.events.model.StageReadyEvent;
 import pl.wiktor.todosgui.events.model.StageInfo;
 
 public class JavaFxLauncher extends Application {

@@ -1,4 +1,4 @@
-package pl.wiktor.todosgui.events;
+package pl.wiktor.todosgui.events.model;
 
 import org.springframework.context.ApplicationEvent;
 import pl.wiktor.todosgui.events.model.StageInfo;

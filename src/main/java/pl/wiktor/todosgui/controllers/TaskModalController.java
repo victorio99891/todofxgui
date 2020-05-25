@@ -8,9 +8,10 @@ import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pl.wiktor.todosgui.initlizers.AvailableView;
-import pl.wiktor.todosgui.initlizers.StageInitializer;
-import pl.wiktor.todosgui.model.Task;
+import pl.wiktor.todosgui.controllers.model.TaskDTO;
+import pl.wiktor.todosgui.events.StageInitializer;
+import pl.wiktor.todosgui.events.enums.AvailableView;
+import pl.wiktor.todosgui.mapper.TaskMapper;
 import pl.wiktor.todosgui.service.TaskService;
 import pl.wiktor.todosgui.state.AppStateStorage;
 
@@ -18,7 +19,7 @@ import java.util.Arrays;
 
 @Slf4j
 @Component
-public class TaskModalController {
+class TaskModalController {
 
     @Autowired
     TaskService taskService;
@@ -26,7 +27,7 @@ public class TaskModalController {
     @Autowired
     StageInitializer stageInitializer;
 
-    private Task selectedTask = null;
+    private TaskDTO selectedTaskDTO = null;
 
     @FXML
     private VBox mainStage;
@@ -57,14 +58,14 @@ public class TaskModalController {
 
     @FXML
     void taskCancel_Action(ActionEvent event) {
-        AppStateStorage.setSelectedTask(null);
+        AppStateStorage.setSelectedTaskDTO(null);
         stageInitializer.publishStageReadyEvent_SameStage(AvailableView.MAIN);
     }
 
     @FXML
     void taskDelete_Action(ActionEvent event) {
-        if (selectedTask != null) {
-            final boolean deleted = taskService.delete(selectedTask.getUUID());
+        if (selectedTaskDTO != null) {
+            final boolean deleted = taskService.delete(selectedTaskDTO.getUUID());
             if (deleted) {
                 stageInitializer.publishStageReadyEvent_SameStage(AvailableView.MAIN);
             }
@@ -74,26 +75,26 @@ public class TaskModalController {
     @FXML
     void taskSave_Action(ActionEvent event) {
         boolean valid = validateData();
-        Task response = null;
+        TaskDTO response = null;
 
         if (valid) {
-            if (selectedTask == null) {
+            if (selectedTaskDTO == null) {
                 log.info("[taskSave_Action] Create new task!");
-                Task task = Task.builder()
+                TaskDTO taskDTO = TaskDTO.builder()
                         .title(this.taskTitleTxtFd.getText())
                         .details(this.taskDetailsTxtFd.getText())
                         .taskStatus(this.taskStatusChBox.getValue())
                         .build();
-                response = taskService.add(task);
+                response = TaskMapper.fromBOtoDTO(taskService.add(TaskMapper.fromDTOtoBO(taskDTO)));
             } else {
                 log.info("[taskSave_Action] Modify existing task!");
-                selectedTask.setTitle(this.taskTitleTxtFd.getText());
-                selectedTask.setDetails(this.taskDetailsTxtFd.getText());
-                selectedTask.setTaskStatus(this.taskStatusChBox.getValue());
-                response = taskService.modify(selectedTask.getUUID(), selectedTask);
+                selectedTaskDTO.setTitle(this.taskTitleTxtFd.getText());
+                selectedTaskDTO.setDetails(this.taskDetailsTxtFd.getText());
+                selectedTaskDTO.setTaskStatus(this.taskStatusChBox.getValue());
+                response = TaskMapper.fromBOtoDTO(taskService.modify(selectedTaskDTO.getUUID(), TaskMapper.fromDTOtoBO(selectedTaskDTO)));
             }
             if (response != null) {
-                AppStateStorage.setSelectedTask(null);
+                AppStateStorage.setSelectedTaskDTO(null);
                 stageInitializer.publishStageReadyEvent_SameStage(AvailableView.MAIN);
             }
         }
@@ -102,15 +103,15 @@ public class TaskModalController {
     @FXML
     public void initialize() {
         this.taskStatusChBox.setItems(FXCollections.observableList(Arrays.asList("TODO", "DONE")));
-        selectedTask = AppStateStorage.getSelectedTask();
-        if (selectedTask == null) {
+        selectedTaskDTO = AppStateStorage.getSelectedTaskDTO();
+        if (selectedTaskDTO == null) {
             this.taskDeleteBtn.setDisable(true);
             this.taskStatusChBox.setValue("TODO");
             this.taskStatusChBox.setDisable(true);
         } else {
-            this.taskTitleTxtFd.setText(selectedTask.getTitle());
-            this.taskDetailsTxtFd.setText(selectedTask.getDetails());
-            this.taskStatusChBox.setValue(selectedTask.getTaskStatus());
+            this.taskTitleTxtFd.setText(selectedTaskDTO.getTitle());
+            this.taskDetailsTxtFd.setText(selectedTaskDTO.getDetails());
+            this.taskStatusChBox.setValue(selectedTaskDTO.getTaskStatus());
         }
     }
 
