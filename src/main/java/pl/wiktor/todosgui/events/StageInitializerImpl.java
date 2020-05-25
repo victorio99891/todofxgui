@@ -1,4 +1,4 @@
-package pl.wiktor.todosgui.initlizers;
+package pl.wiktor.todosgui.events;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,27 +10,30 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import pl.wiktor.todosgui.JavaFxLauncher;
-import pl.wiktor.todosgui.events.StageReadyEvent;
+import pl.wiktor.todosgui.events.enums.AvailableView;
 import pl.wiktor.todosgui.events.model.StageInfo;
+import pl.wiktor.todosgui.events.model.StageReadyEvent;
 
 import java.io.IOException;
 
 @Component
-public class StageInitializer implements ApplicationListener<StageReadyEvent> {
+public class StageInitializerImpl implements ApplicationListener<StageReadyEvent>, StageInitializer {
 
     private String applicationTitle;
     private ApplicationContext applicationContext;
 
-    public StageInitializer(@Value("${spring.application.ui.title}") String applicationTitle,
-                            ApplicationContext applicationContext) {
+    public StageInitializerImpl(@Value("${spring.application.ui.title}") String applicationTitle,
+                                ApplicationContext applicationContext) {
         this.applicationTitle = applicationTitle;
         this.applicationContext = applicationContext;
     }
 
+    @Override
     public void publishStageReadyEvent_SameStage(AvailableView view) {
         applicationContext.publishEvent(new StageReadyEvent(new StageInfo(JavaFxLauncher.getMainStage(), new ClassPathResource(view.getName()))));
     }
 
+    @Override
     public void publishStageReadyEvent_NewStage(AvailableView view) {
         applicationContext.publishEvent(new StageReadyEvent(new StageInfo(JavaFxLauncher.getNewStage(), new ClassPathResource(view.getName()))));
     }

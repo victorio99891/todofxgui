@@ -8,8 +8,8 @@ import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pl.wiktor.todosgui.initlizers.AvailableView;
-import pl.wiktor.todosgui.initlizers.StageInitializer;
+import pl.wiktor.todosgui.events.StageInitializer;
+import pl.wiktor.todosgui.events.enums.AvailableView;
 import pl.wiktor.todosgui.model.Task;
 import pl.wiktor.todosgui.service.TaskService;
 import pl.wiktor.todosgui.state.AppStateStorage;
@@ -21,10 +21,10 @@ import java.util.Arrays;
 public class TaskModalController {
 
     @Autowired
-    TaskService taskService;
+    private TaskService taskService;
 
     @Autowired
-    StageInitializer stageInitializer;
+    private StageInitializer stageInitializerImpl;
 
     private Task selectedTask = null;
 
@@ -58,7 +58,7 @@ public class TaskModalController {
     @FXML
     void taskCancel_Action(ActionEvent event) {
         AppStateStorage.setSelectedTask(null);
-        stageInitializer.publishStageReadyEvent_SameStage(AvailableView.MAIN);
+        stageInitializerImpl.publishStageReadyEvent_SameStage(AvailableView.MAIN);
     }
 
     @FXML
@@ -66,7 +66,7 @@ public class TaskModalController {
         if (selectedTask != null) {
             final boolean deleted = taskService.delete(selectedTask.getUUID());
             if (deleted) {
-                stageInitializer.publishStageReadyEvent_SameStage(AvailableView.MAIN);
+                stageInitializerImpl.publishStageReadyEvent_SameStage(AvailableView.MAIN);
             }
         }
     }
@@ -94,7 +94,7 @@ public class TaskModalController {
             }
             if (response != null) {
                 AppStateStorage.setSelectedTask(null);
-                stageInitializer.publishStageReadyEvent_SameStage(AvailableView.MAIN);
+                stageInitializerImpl.publishStageReadyEvent_SameStage(AvailableView.MAIN);
             }
         }
     }

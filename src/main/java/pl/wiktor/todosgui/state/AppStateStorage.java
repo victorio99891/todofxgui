@@ -6,14 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AppStateStorage {
+public abstract class AppStateStorage {
     private static List<Task> tasks = new ArrayList<>();
 
     private static Task selectedTask = null;
-
-    private AppStateStorage() {
-
-    }
 
     public static Task getSelectedTask() {
         return selectedTask;

@@ -1,4 +1,4 @@
-package pl.wiktor.todosgui.initlizers;
+package pl.wiktor.todosgui.events.enums;
 
 import lombok.Getter;
 
