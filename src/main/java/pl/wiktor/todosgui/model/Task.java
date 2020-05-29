@@ -1,4 +1,4 @@
-package pl.wiktor.todosgui;
+package pl.wiktor.todosgui.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package pl.wiktor.todosgui;
+package pl.wiktor.todosgui.controllers;
 
 
 import javafx.application.Platform;
@@ -13,6 +13,11 @@ import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import pl.wiktor.todosgui.initlizers.StageInitializer;
+import pl.wiktor.todosgui.initlizers.enums.AvailableView;
+import pl.wiktor.todosgui.model.Task;
+import pl.wiktor.todosgui.service.TaskService;
+import pl.wiktor.todosgui.state.AppStateStorage;
 
 import javax.annotation.PostConstruct;
 

@@ -1,6 +1,6 @@
-package pl.wiktor.todosgui;
+package pl.wiktor.todosgui.service;
 
-import pl.wiktor.todosgui.Task;
+import pl.wiktor.todosgui.model.Task;
 
 import java.util.List;
 

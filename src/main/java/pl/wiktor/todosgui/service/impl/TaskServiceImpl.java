@@ -1,14 +1,14 @@
-package pl.wiktor.todosgui;
+package pl.wiktor.todosgui.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import pl.wiktor.todosgui.service.ExceptionHandler;
 import pl.wiktor.todosgui.JavaFxLauncher;
-import pl.wiktor.todosgui.Task;
-import pl.wiktor.todosgui.ExceptionHandler;
-import pl.wiktor.todosgui.TaskService;
+import pl.wiktor.todosgui.model.Task;
+import pl.wiktor.todosgui.service.TaskService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
