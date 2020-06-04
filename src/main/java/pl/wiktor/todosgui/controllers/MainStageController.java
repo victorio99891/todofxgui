@@ -15,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.wiktor.todosgui.initlizers.AvailableView;
 import pl.wiktor.todosgui.initlizers.StageInitializer;
+import pl.wiktor.todosgui.model.ChuckNorrisJoke;
 import pl.wiktor.todosgui.model.Task;
+import pl.wiktor.todosgui.service.JokeService;
 import pl.wiktor.todosgui.service.TaskService;
 import pl.wiktor.todosgui.state.AppStateStorage;
 
@@ -30,6 +32,9 @@ public class MainStageController {
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private JokeService jokeService;
 
     @FXML
     private VBox mainStage;
@@ -47,6 +52,9 @@ public class MainStageController {
     private MenuItem exitMenuItem;
 
     @FXML
+    private MenuItem randomJokeMenuItem;
+
+    @FXML
     private TableView<Task> todoTableView;
 
     @FXML
@@ -58,10 +66,14 @@ public class MainStageController {
     @FXML
     private TableColumn<Task, String> doneTableColumn;
 
+    @FXML
+    private TextField randomJokeLabel;
+
 
     @FXML
     public void initialize() {
         fillTaskTables();
+        getJoke();
         registerClickableTasks();
         registerFileMenuEventHandlers();
     }
@@ -86,6 +98,15 @@ public class MainStageController {
         this.syncMenuItem.addEventHandler(ActionEvent.ACTION, (event) -> {
             fillTaskTables();
         });
+
+        this.randomJokeMenuItem.addEventHandler(ActionEvent.ACTION, (event -> {
+            getJoke();
+        }));
+    }
+
+    private void getJoke() {
+        ChuckNorrisJoke joke = jokeService.getRandomJoke();
+        randomJokeLabel.setText(joke.getValue());
     }
 
     private void fillTaskTables() {
